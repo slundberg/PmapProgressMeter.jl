@@ -6,5 +6,6 @@ using PmapProgressMeter
 using ProgressMeter
 
 # just make sure it runs
-p = Progress(10)
-@test pmap(p, x->begin sleep(1); x end, 1:10)[1] == 1
+vals = 1:10
+p = Progress(vals)
+@test pmap(p, x->begin sleep(1); x*2 end, vals)[1] == vals[1]*2
