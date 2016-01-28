@@ -16,5 +16,5 @@ Pkg.clone("https://github.com/slundberg/PmapProgressMeter.jl")
 using ProgressMeter
 using PmapProgressMeter
 
-pmap(Progress(10), x->begin sleep(1); x end, 1:10)
+pmap(x->begin sleep(1); x end, Progress(10), 1:10)
 ```
