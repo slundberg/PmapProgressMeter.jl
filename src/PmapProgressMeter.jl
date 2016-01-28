@@ -7,7 +7,7 @@ globalProgressMeters = Dict()
 globalProgressValues = Dict()
 
 "Wraps pmap with a progress meter."
-function Base.pmap(p::Progress, f::Function, values)
+function Base.pmap(f::Function, p::Progress, values)
     global globalProgressMeters
     global globalProgressValues
 
