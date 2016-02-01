@@ -7,7 +7,7 @@ globalProgressMeters = Dict()
 globalProgressValues = Dict()
 
 "Wraps pmap with a progress meter."
-function Base.pmap(f::Function, p::Progress, values)
+function Base.pmap(f::Function, p::Progress, values; kwargs...)
     global globalProgressMeters
     global globalProgressValues
 
@@ -20,7 +20,7 @@ function Base.pmap(f::Function, p::Progress, values)
         wait(remotecall(1, updateProgressMeter, id))
         v
     end
-    out = pmap(mapper, values)
+    out = pmap(mapper, values; kwargs...)
 
     delete!(globalProgressMeters, id)
     out
