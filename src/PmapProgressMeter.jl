@@ -5,15 +5,18 @@ using ProgressMeter
 # a global to hold progress meter references
 globalProgressMeters = Dict()
 globalProgressValues = Dict()
+globalPrintLock = Dict()
 
 "Wraps pmap with a progress meter."
 function Base.pmap(f::Function, p::Progress, values...; kwargs...)
     global globalProgressMeters
     global globalProgressValues
+    global globalPrintLock
 
     id = randstring(50)
     globalProgressMeters[id] = p
     globalProgressValues[id] = 0
+    globalPrintLock[id] = ReentrantLock()
 
     out = pmap(values...; kwargs...) do x...
         v = f(x...)
@@ -29,9 +32,12 @@ end
 function updateProgressMeter(id)
     global globalProgressMeters
     global globalProgressValues
+    global globalPrintLock
 
+    lock(globalPrintLock[id])
     globalProgressValues[id] += 1
     update!(globalProgressMeters[id] , globalProgressValues[id])
+    unlock(globalPrintLock[id])
 end
 
 end # module
