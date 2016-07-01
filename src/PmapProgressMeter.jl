@@ -32,7 +32,7 @@ end
 function updateProgressMeter(id)
     global globalProgressMeters
     global globalProgressValues
-    global globalIsPrinting
+    global globalPrintLock
 
     lock(globalPrintLock[id])
     globalProgressValues[id] += 1
