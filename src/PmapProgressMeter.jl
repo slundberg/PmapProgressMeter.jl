@@ -18,8 +18,19 @@ function Base.pmap(f::Function, p::Progress, values...; kwargs...)
     globalProgressValues[id] = 0
     globalPrintLock[id] = ReentrantLock()
 
-    out = pmap(values...; kwargs...) do x...
-        v = f(x...)
+    passid = false
+    kwa = Dict(kwargs)
+    if haskey(kwa,:passid)
+      passid = true
+      delete!(kwa,:passid)
+    end
+
+    out = pmap(values...; kwa...) do x...
+        if passid
+          v = f(id, x...)
+        else
+          v = f(x...)
+        end
         wait(remotecall(1, updateProgressMeter, id))
         v
     end
