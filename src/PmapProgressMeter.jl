@@ -2,6 +2,8 @@ module PmapProgressMeter
 
 using ProgressMeter
 
+export updateProgressMeter
+
 # a global to hold progress meter references
 globalProgressMeters = Dict()
 globalProgressValues = Dict()
