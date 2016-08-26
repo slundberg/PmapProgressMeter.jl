@@ -28,7 +28,7 @@ function Base.pmap(f::Function, p::Progress, values...; kwargs...)
 
     out = pmap(values...; kwa...) do x...
         if passcallback
-          v = f(n -> updateProgressMeter(id,n), x...)
+          v = f(n -> remotecall(1,updateProgressMeter,id,n), x...)
         else
           v = f(x...)
           wait(remotecall(1, updateProgressMeter, id, 1))
@@ -47,7 +47,7 @@ function updateProgressMeter(id,n)
     global globalPrintLock
 
     lock(globalPrintLock[id])
-    globalProgressValues[id] += 1
+    globalProgressValues[id] += n
     update!(globalProgressMeters[id] , globalProgressValues[id])
     unlock(globalPrintLock[id])
 end
