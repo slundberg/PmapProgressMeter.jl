@@ -25,3 +25,7 @@ p = Progress(length(vals))
 vals2 = 10:-1:1
 p = Progress(length(vals))
 @test pmap(+, p, vals, vals2) == 11*ones(Int,length(vals))
+
+# make sure callback passing works
+vals = 1:10
+@test pmap((cb, x) -> begin sleep(.1); cb(1); x*2 end, Progress(length(vals)),vals,passcallback=true)[1] == vals[1]*2
