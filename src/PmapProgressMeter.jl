@@ -19,7 +19,7 @@ function Base.pmap(f::Function, p::Progress, values...; kwargs...)
     globalProgressValues[id] = 0
     globalPrintLock[id] = ReentrantLock()
 
-    passid = false
+    passcallback = false
     kwa = Dict(kwargs)
     if haskey(kwa,:passcallback)
       passcallback = true
