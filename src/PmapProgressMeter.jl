@@ -1,6 +1,7 @@
 module PmapProgressMeter
 
 using ProgressMeter
+using Compat
 
 # a global to hold progress meter references
 globalProgressMeters = Dict()
@@ -28,10 +29,10 @@ function Base.pmap(f::Function, p::Progress, values...; kwargs...)
 
     out = pmap(values...; kwa...) do x...
         if passcallback
-          v = f(n -> remotecall(1,updateProgressMeter,id,n), x...)
+          v = f(n -> remotecall(updateProgressMeter, 1, id, n), x...)
         else
           v = f(x...)
-          wait(remotecall(1, updateProgressMeter, id, 1))
+          wait(remotecall(updateProgressMeter, 1, id, 1))
         end
         v
     end
