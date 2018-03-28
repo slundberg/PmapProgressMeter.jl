@@ -17,7 +17,7 @@ function Base.pmap(f::Function, p::Progress, values...; kwargs...)
 
     id = randstring(50)
     globalProgressMeters[id] = p
-    globalProgressValues[id] = 0
+    globalProgressValues[id] = p.counter
     globalPrintLock[id] = ReentrantLock()
 
     passcallback = false
